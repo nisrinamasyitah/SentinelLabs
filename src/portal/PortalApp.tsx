@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import Dashboard from "./Dashboard";
 import ScanRunner from "./ScanRunner";
@@ -7,6 +8,7 @@ import { getCurrentEngagement, getMe, logout } from "./api";
 import type { ClientProfile, Engagement } from "./types";
 
 export default function PortalApp() {
+  const navigate = useNavigate();
   const [client, setClient] = useState<ClientProfile | null | undefined>(undefined);
   const [engagement, setEngagement] = useState<Engagement | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -33,6 +35,7 @@ export default function PortalApp() {
     await logout();
     setClient(null);
     setEngagement(null);
+    navigate("/");
   }
 
   // undefined = still checking session on first load

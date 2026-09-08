@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Kanit:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --brand-green: #4a7c4e;
+  --brand-red: #e11d2e;
+}
+
+.font-display {
+  font-family: "Anton", "Kanit", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Kanit", system-ui, sans-serif;
+  background: #050605;
+}

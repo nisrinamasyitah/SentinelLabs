@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Severity {
+  Critical
+  High
+  Medium
+  Low
+  Info
+}
+
+enum FindingStatus {
+  open
+  verifying
+  fixed
+}
+
+enum Stage {
+  Recon
+  Scan
+  Exploit
+  Report
+  Retest
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String
+  contactName String
+  createdAt   DateTime @default(now())
+
+  engagements Engagement[]
+  magicLinks  MagicLinkToken[]
+}
+
+model Engagement {
+  id              String   @id @default(cuid())
+  clientId        String
+  client          Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name            String
+  target          String
+  stage           Stage    @default(Recon)
+  liveRunPending  Boolean  @default(false)
+  startedOn       DateTime @default(now())
+
+  findings Finding[]
+
+  @@index([clientId])
+}
+
+model Finding {
+  id            String        @id @default(cuid())
+  engagementId  String
+  engagement    Engagement    @relation(fields: [engagementId], references: [id], onDelete: Cascade)
+  title         String
+  severity      Severity
+  cvss          Float
+  asset         String
+  status        FindingStatus @default(open)
+  discoveredOn  DateTime      @default(now())
+
+  @@index([engagementId])
+}
+
+model MagicLinkToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}

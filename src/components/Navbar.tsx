@@ -42,16 +42,10 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center bg-[#07080a]/70 px-6 py-6 backdrop-blur-md md:px-16">
-      <a href="#top" className="flex items-center gap-2.5 font-display text-xl leading-tight text-white">
-        <span className="relative flex h-2.5 w-2.5 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--brand-green)] opacity-75" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-green)] shadow-[0_0_10px_2px_rgba(124,255,140,0.6)]" />
-        </span>
-        <span>
-          Sentinel
-          <br />
-          Labs<span className="text-[var(--brand-red)]">.</span>
-        </span>
+      <a href="#top" className="font-display text-xl leading-tight text-white">
+        Sentinel
+        <br />
+        Labs<span className="text-[var(--brand-red)]">.</span>
       </a>
 
       <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-lg shadow-black/30 backdrop-blur-xl md:flex">

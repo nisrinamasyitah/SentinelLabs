@@ -55,8 +55,8 @@ export default function ScanCTA({ defaultOpen = false }: { defaultOpen?: boolean
           <p className="text-amber-300">{emailError}</p>
         ) : (
           <p>
-            Scan started for <span className="text-white">{domain}</span>. We
-            emailed <span className="text-white">{email}</span> a link to
+            Scan started for <span className="text-white">{domain}</span>.
+            Check <span className="text-white">{email}</span> for a link to
             watch it live.
           </p>
         )}

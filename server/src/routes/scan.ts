@@ -2,7 +2,7 @@ import { Router } from "express";
 import crypto from "node:crypto";
 import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
-import { sendMagicLinkEmail } from "../lib/email.js";
+import { sendMagicLinkEmail, smtpConfigured } from "../lib/email.js";
 import { runSimulatedEngagement } from "../lib/scanSim.js";
 import { asyncHandler } from "../lib/asyncHandler.js";
 
@@ -81,20 +81,24 @@ router.post(
     });
     const link = `${CLIENT_ORIGIN}/portal/verify?token=${token}&engagement=${engagement.id}`;
 
-    try {
+    if (!smtpConfigured) {
+      // dev fallback is instant (just a console.log, no network call) — fine
+      // to await and hand devLink straight back for local testing
       const { devLink } = await sendMagicLinkEmail(email, link);
       res.json({ ok: true, engagementId: engagement.id, devLink });
-    } catch (err) {
-      console.error("failed to send magic-link email", err);
-      // the engagement was already created and is running — don't lose that,
-      // just tell the client the email failed so they can retry sign-in
-      res.status(200).json({
-        ok: true,
-        engagementId: engagement.id,
-        emailError:
-          "Scan started, but we couldn't send the sign-in email. Use 'Send Sign-In Link' on the portal login page with the same email to get in.",
-      });
+      return;
     }
+
+    // a real SMTP send is a genuine external API call that routinely takes
+    // several seconds — don't make the caller wait on it. The engagement is
+    // already created and running; if the email fails, the token still
+    // exists and the client can retry via "Send Sign-In Link" on the portal
+    // login page with the same email.
+    sendMagicLinkEmail(email, link).catch((err) => {
+      console.error("failed to send magic-link email", err);
+    });
+
+    res.json({ ok: true, engagementId: engagement.id });
   }),
 );
 

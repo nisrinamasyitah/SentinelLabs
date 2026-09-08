@@ -2,7 +2,10 @@ import nodemailer from "nodemailer";
 
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM } = process.env;
 
-const smtpConfigured = Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
+// exported so callers can decide whether to await the send at all: the dev
+// fallback below is instant (console.log, no network), but a real SMTP send
+// is a genuine external API call that can take several seconds
+export const smtpConfigured = Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
 
 const transporter = smtpConfigured
   ? nodemailer.createTransport({

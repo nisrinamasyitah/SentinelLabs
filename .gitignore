@@ -24,3 +24,4 @@ server/generated
 *.njsproj
 *.sln
 *.sw?
+*.tsbuildinfo

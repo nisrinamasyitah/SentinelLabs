@@ -27,7 +27,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative z-10 mx-auto max-w-7xl scroll-mt-24 px-6 py-24 md:px-16"
+      className="relative z-10 mx-auto flex min-h-[calc(100vh-98px)] max-w-7xl scroll-mt-24 flex-col justify-center px-6 py-16 md:px-16"
     >
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-[0.9fr_1.1fr]">
         <div>

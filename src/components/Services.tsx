@@ -35,7 +35,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative z-10 mx-auto max-w-7xl scroll-mt-24 px-6 py-24 md:px-16"
+      className="relative z-10 mx-auto flex min-h-[calc(100vh-98px)] max-w-7xl scroll-mt-24 flex-col justify-center px-6 py-16 md:px-16"
     >
       <div className="max-w-2xl">
         <p className="font-display text-sm tracking-widest text-[var(--brand-green)]">

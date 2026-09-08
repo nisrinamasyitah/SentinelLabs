@@ -6,11 +6,13 @@ const NODES = [
   { x: 520, y: 480 },
   { x: 250, y: 520 },
   { x: 300, y: 260 },
+  { x: 110, y: 230 },
+  { x: 150, y: 470 },
 ];
 
 const HUB = { x: 420, y: 300 };
 
-const EDGES = [0, 1, 2, 3, 4, 5, 6].map((i) => [HUB, NODES[i]] as const);
+const EDGES = NODES.map((n) => [HUB, n] as const);
 
 export default function ThreatMap() {
   return (

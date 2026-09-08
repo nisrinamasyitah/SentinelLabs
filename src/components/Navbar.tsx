@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const LINKS = [
+// `sectionId` is what the scroll-spy observes; it defaults to the href's
+// fragment, but Home needs to watch the hero (#home) while still linking to
+// the very top of the page (#top) so a click always lands at true page top.
+const LINKS: { label: string; href: string; sectionId?: string }[] = [
+  { label: "Home", href: "#top", sectionId: "home" },
   { label: "Services", href: "#services" },
   { label: "About Us", href: "#about" },
   { label: "Contact", href: "#contact" },
@@ -10,9 +14,9 @@ const LINKS = [
 
 export default function Navbar() {
   const [activeId, setActiveId] = useState<string | null>(null);
-
+ 
   useEffect(() => {
-    const ids = LINKS.map((l) => l.href.slice(1));
+    const ids = LINKS.map((l) => l.sectionId ?? l.href.slice(1));
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -38,15 +42,21 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center bg-[#07080a]/70 px-6 py-6 backdrop-blur-md md:px-16">
-      <a href="#top" className="font-display text-xl leading-tight text-white">
-        Sentinel
-        <br />
-        Labs<span className="text-[var(--brand-red)]">.</span>
+      <a href="#top" className="flex items-center gap-2.5 font-display text-xl leading-tight text-white">
+        <span className="relative flex h-2.5 w-2.5 shrink-0">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--brand-green)] opacity-75" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-green)] shadow-[0_0_10px_2px_rgba(124,255,140,0.6)]" />
+        </span>
+        <span>
+          Sentinel
+          <br />
+          Labs<span className="text-[var(--brand-red)]">.</span>
+        </span>
       </a>
 
       <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1.5 shadow-lg shadow-black/30 backdrop-blur-xl md:flex">
         {LINKS.map((link) => {
-          const isActive = activeId === link.href.slice(1);
+          const isActive = activeId === (link.sectionId ?? link.href.slice(1));
           return (
             <a
               key={link.label}

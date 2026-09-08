@@ -5,7 +5,7 @@ export default function GetStarted() {
   return (
     <section
       id="get-started"
-      className="relative z-10 mx-auto max-w-5xl scroll-mt-24 px-6 py-24 md:px-16"
+      className="relative z-10 mx-auto flex min-h-[calc(100vh-98px)] max-w-5xl scroll-mt-24 flex-col justify-center px-6 py-16 md:px-16"
     >
       <div className="rounded-2xl border border-[var(--brand-green)]/25 bg-gradient-to-b from-[var(--brand-green)]/10 to-transparent p-8 text-center md:p-14">
         <p className="font-display text-sm tracking-widest text-[var(--brand-green)]">

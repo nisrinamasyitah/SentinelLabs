@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyMagicLink } from "./api";
+import { broadcastAuthChange } from "./authChannel";
 
 export default function VerifyPage() {
   const [params] = useSearchParams();
@@ -21,7 +22,10 @@ export default function VerifyPage() {
     hasRun.current = true;
 
     verifyMagicLink(token)
-      .then(() => navigate("/portal", { replace: true }))
+      .then(() => {
+        broadcastAuthChange("signed-in");
+        navigate("/portal", { replace: true });
+      })
       .catch((err) => {
         setError(err instanceof Error ? err.message : "Sign-in failed");
       });

@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Transparently proxy /api/* to the deployed backend, mirroring the Vite dev
+# proxy used locally — the frontend's fetch calls stay relative ("/api/..."),
+# so no frontend code differs between dev and production, and the browser
+# never makes a cross-origin request (Netlify's edge forwards it server-side),
+# which keeps cookies scoped correctly with zero CORS complexity.
+[[redirects]]
+  from = "/api/*"
+  to = "https://api-production-8c8b.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback so client-side routes (e.g. /portal, /portal/verify) resolve
+# correctly on a direct load or refresh instead of 404ing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

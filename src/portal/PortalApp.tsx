@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 import ScanRunner from "./ScanRunner";
 import Background from "../components/Background";
 import { getCurrentEngagement, getMe, logout } from "./api";
+import { broadcastAuthChange, onAuthChange } from "./authChannel";
 import type { ClientProfile, Engagement } from "./types";
 
 export default function PortalApp() {
@@ -31,10 +32,19 @@ export default function PortalApp() {
     load();
   }, []);
 
+  useEffect(() => {
+    // another tab (e.g. the one a magic link opened) completed a sign-in or
+    // sign-out — pick that up here instead of leaving this tab stale
+    return onAuthChange((type) => {
+      if (type === "signed-in" || type === "signed-out") load();
+    });
+  }, []);
+
   async function handleLogout() {
     await logout();
     setClient(null);
     setEngagement(null);
+    broadcastAuthChange("signed-out");
     navigate("/");
   }
 

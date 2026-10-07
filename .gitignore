@@ -25,3 +25,6 @@ server/generated
 *.sln
 *.sw?
 *.tsbuildinfo
+
+# Local Netlify folder
+.netlify

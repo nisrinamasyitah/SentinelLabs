@@ -2,7 +2,7 @@ import { Router } from "express";
 import crypto from "node:crypto";
 import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
-import { sendMagicLinkEmail, smtpConfigured } from "../lib/email.js";
+import { sendMagicLinkEmail, emailConfigured } from "../lib/email.js";
 import { runSimulatedEngagement } from "../lib/scanSim.js";
 import { asyncHandler } from "../lib/asyncHandler.js";
 
@@ -81,7 +81,7 @@ router.post(
     });
     const link = `${CLIENT_ORIGIN}/portal/verify?token=${token}&engagement=${engagement.id}`;
 
-    if (!smtpConfigured) {
+    if (!emailConfigured) {
       // dev fallback is instant (just a console.log, no network call) — fine
       // to await and hand devLink straight back for local testing
       const { devLink } = await sendMagicLinkEmail(email, link);
@@ -89,8 +89,8 @@ router.post(
       return;
     }
 
-    // a real SMTP send is a genuine external API call that routinely takes
-    // several seconds — don't make the caller wait on it. The engagement is
+    // a real email send is a genuine external API call that routinely takes
+    // a second or two — don't make the caller wait on it. The engagement is
     // already created and running; if the email fails, the token still
     // exists and the client can retry via "Send Sign-In Link" on the portal
     // login page with the same email.
